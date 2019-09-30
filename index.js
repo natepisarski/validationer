@@ -32,13 +32,17 @@ const executeObjectValidations = (contextObject, validations) => {
             collection.push(executeArrayValidations(contextObject[key], validations[key]));
             continue;
         }
-        if (_.isObject(validations[key])) {
+        if (!_.isFunction(validations[key]) && _.isObject(validations[key])) {
             console.debug('Running object validation ' + key);
             console.debug(contextObject);
+            console.debug(validations[key]);
              collection.push(executeObjectValidations(contextObject[key],  validations[key]));
              continue;
         }
         // This must be a regular one-to-one validation
+        console.debug('Running regular item');
+        console.debug(validations[key]);
+        console.debug(contextObject[key]);
         collection.push((validations[key])(contextObject[key]));
     }
 
