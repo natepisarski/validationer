@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 /*
 1 - Multiple can be run
 2 - An object can be used to run nested validations
-validationer({name: 'Tod', phone: '6097747183', birthday: { year: '2019' }}})({
+validationer({name: 'Tod', phone: '7777777777', birthday: { year: '2019' }}})({
     name: IsAlphanumeric,
     phone: [IsPhone, IsRequired, IsLengthGreaterThan(5)],
     birthday: {
@@ -16,11 +16,10 @@ validationer({name: 'Tod', phone: '6097747183', birthday: { year: '2019' }}})({
 const executeArrayValidations = (contextObject, validations) => {
     for(const validator of validations) {
         if (!validator(contextObject)) {
-            console.debug('Returning false for array validation');
             return false;
         }
     }
-    console.debug('Returning true for array validation');
+
     return true;
 };
 
@@ -33,21 +32,13 @@ const executeObjectValidations = (contextObject, validations) => {
             continue;
         }
         if (!_.isFunction(validations[key]) && _.isObject(validations[key])) {
-            console.debug('Running object validation ' + key);
-            console.debug(contextObject);
-            console.debug(validations[key]);
              collection.push(executeObjectValidations(contextObject[key],  validations[key]));
              continue;
         }
         // This must be a regular one-to-one validation
-        console.debug('Running regular item');
-        console.debug(validations[key]);
-        console.debug(contextObject[key]);
         collection.push((validations[key])(contextObject[key]));
     }
 
-    console.debug('RETURNING_COLLECTION');
-    console.debug(collection);
     return collection.filter(run => run === false);
 };
 /* validations ultimately have the function signature of
