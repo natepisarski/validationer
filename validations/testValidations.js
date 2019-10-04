@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+
 export const IsLongerThan10Characters = (text) => {
     return text.toString().length > 10;
 };
@@ -9,4 +10,8 @@ export const IsShorterThan5Characters = (text) => {
 
 export const IsNumeric = (text) => {
     return _.isNumber(text);
+};
+
+export const IsLongerThan = length => countable => {
+    return countable.length < length;
 };
