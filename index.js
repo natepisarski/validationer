@@ -88,6 +88,12 @@ const executeArrayValidations = (contextObject, validations) => {
  * }
  *
  * that determines how to distill down a validation map into a boolean "this worked or didn't" value.
+ *
+ * Higher-order functions for And(), Or()
+ *
+ * Maybe english pack
+ *
+ * "their first  name is longer than 5"
  * @param contextObject
  * @param validations
  * @returns {*[]}
