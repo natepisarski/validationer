@@ -25,7 +25,7 @@ const ErrorConstructor = errorMessage => new ValidationErrorResult(errorMessage)
 
 const runSingleValidation = (item, context, validation) => {
     // Here, the validation is a function that takes (item, context, success, error)
-    const validationResult = validation(item, context, SuccessConstructor, ErrorConstructor);
+    const validationResult = validation(item, SuccessConstructor, ErrorConstructor, context);
 
     // A constructor has already been used, and this validation is properly formatted
     if (validationResult instanceof ValidationErrorResult) {
