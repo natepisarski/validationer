@@ -33,16 +33,22 @@ the most sense.
  */
 export const SimpleTest = (func, successMessage, errorMessage, inverse = false) => {
     return (item, Success, Error, context) => {
+
         let functionThatRuns = (item, context) => func(item, context);
         if (inverse) {
             functionThatRuns = (item, context) => !func(item, context);
         }
-        return functionThatRuns(item, context) ? Success(successMessage) : Error(errorMessage);
+        const returnedValue = functionThatRuns(item, context);
+        if (Success && Error) {
+            return returnedValue ? Success(successMessage) : Error(errorMessage);
+        }
+
+        return returnedValue;
     }
 };
 
 /* Math & Number Related */
-export const IsEvenTest = SimpleTest(
+export const IsEven = SimpleTest(
     number => number % 2 === 0,
     'Number was even',
 'Number was not even'

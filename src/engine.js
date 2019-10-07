@@ -17,7 +17,7 @@ Comments are used above each type of rule to describe it.
  * }
  */
 
-import {ValidationErrorResult, ValidationSuccessResult} from "./validationResults";
+import {ValidationErrorResult, ValidationResult, ValidationSuccessResult} from "./validationResults";
 import * as _ from "lodash";
 
 const SuccessConstructor = successMessage => new ValidationSuccessResult(successMessage);
@@ -28,7 +28,7 @@ const runSingleValidation = (item, context, validation) => {
     const validationResult = validation(item, SuccessConstructor, ErrorConstructor, context);
 
     // A constructor has already been used, and this validation is properly formatted
-    if (validationResult instanceof ValidationErrorResult) {
+    if (validationResult instanceof ValidationResult) {
         return validationResult;
     }
 
