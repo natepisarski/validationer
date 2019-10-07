@@ -79,8 +79,30 @@ const runObjectValidations = (item, validations, context = null) => {
     return validationStructure;
 };
 
+const simpleDistill = validationStructure => {
+    let runs = [];
+    for(const key of Object.keys(validationStructure)) {
+        const currentValue = validationStructure[key];
+        let passes = false;
+
+        if (_.isArray(currentValue)) {
+            passes = _.every(_.map(currentValue, item => item instanceof ValidationSuccessResult))
+        }
+        else if (_.isObject(currentValue) && !(currentValue instanceof ValidationResult)) {
+            passes = simpleDistill(currentValue);
+        }
+        else {
+            passes = currentValue instanceof ValidationSuccessResult;
+        }
+        runs.push(passes);
+    }
+
+    return _.every(runs);
+};
 // This returns a mapping of the results of the validations compared to their object structure. This is not a function
 // which will distill the validation runs down to a "boolean".
 export const validationerEngine = (object, validations) => {
-    return runObjectValidations(object, validations);
+    const validationStructure = runObjectValidations(object, validations);
+
+    return simpleDistill(validationStructure);
 };

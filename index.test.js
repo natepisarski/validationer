@@ -37,9 +37,9 @@ describe('Basic Validations', () => {
             }
         };
 
-        const validationResult = validationerEngine(object, validations);
+        // const validationResult = validationerEngine(object, validations);
 
-        const justNested = validationResult.nested;
+        // const justNested = validationResult.nested;
         // TODO: Come back and write unit tests
         expect(1).toBe(1);
     });
@@ -104,7 +104,7 @@ describe('Global Test - Test the engine and all known validations', () => {
     for(const key of Object.keys(result)) {
         expect(result[key]).toBeInstanceOf(ValidationSuccessResult)
     }
-    console.log(result);
+
 });
 
 describe('Distiller - Objects are distilled to the proper boolean values', () => {
