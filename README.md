@@ -1,8 +1,9 @@
 # validationer
 > Make validation the easiest thing you do
 
-Validationer is a Javascript library for validating objects. It excels in doing very complex validations, which can then be nested, composed, and all-around re-used 
-for future validations. This package is both the engine which does the validating, as well as some out-of-the-box validations.
+Validationer is a Javascript library for live input validation. It is (mostly) just an engine for building validation rules that can be composed, combined, and chained together in special ways. We also provide some validations out-of-the-box.
+
+This library is specifically designed for validating entire Javascript objects, particularly ones which have deep nested data, but a known schema.
 
 # Examples
 
@@ -25,7 +26,7 @@ const object = {
     }
 };
 const validations = {
-    age: [IsEven, IsOd], // FAILS BECAUSE OF THIS
+    age: [IsEven, IsOdd], // FAILS BECAUSE OF THIS - can't be even and odd
     favoriteNumber: IsOdd,
     nested: {
         id: [IsEven, IsOdd]
@@ -54,10 +55,9 @@ validationer(object, validations);
 * DoesContain(x)
 
 # Extending Validationer
-The idea is that the validationer "standard library" will grow to include everything you might want to validate. Obviously, 
-this being the real world and all, that will be impossible. So, you can create your own validation rules to plug into the
-validationer engine.
+Validationer is an engine more than it is a library. Creating your own validation rules is integral to using the package.
 
+## High Customization
 Any Javascript function that takes the arguments: `item, Success, Error, context` can be a validation rule.
 
 ```javascript
@@ -69,17 +69,25 @@ export const IsOverTen = (item, Succeess, Error, context) => {
 }
 ```
 
-The only parameter you _really_ need is `item`. `Success` and `Failure` let you choose your own error and success messages,
-while `context` points to the overall parent object. Since every parameter is optional, you don't need to overcomplicate things.
+The only parameter you _really_ need is `item`, which is the value of the property being validated. The rest are:
 
-If your function returns `true` or `false`, the validationer engine will interpret `true` to mean `Success`. This works well,
-because most existing helper libraries rely on simple booleans to describe status. So these can be used here.
+- `Success`: Choose a custom success message
+- `Error`: Choose a custom error message
+- `context`: The entire object being validated, for complex rules.
 
+## Low Customization
+If your function returns `true` or `false`, then validationer will interpret `true` to mean `Success` and vice-versa. This lets you keep rules brief, such as:
+
+```javascript
+export const IsOverTen = item => item > 10;
+```
+
+## Medium Customization
 Since most Validation rules you write will follow that same form:
 
 > IF something, SUCCESS something, else ERROR something
 
-A function names `SimpleTest` is provided for your custom validations. That way, you can write your functions like this:
+A function named `SimpleTest` is provided for your custom validations. That way, you can write your functions like this:
 
 ```javascript
 export const IsEven = SimpleTest(
